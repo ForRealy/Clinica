@@ -45,4 +45,4 @@ You can find the complete list of dependencies in the `pom.xml` file.
 
 This project is released into the public domain under the terms of the Unlicense. This means you can use, modify, and distribute this code for any purpose, including commercial applications, without any restrictions.
 
-For more information, see the Unlicense.
+For more information, see the [Unlicense](http://unlicense.org/).
