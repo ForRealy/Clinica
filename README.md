@@ -16,8 +16,8 @@ Clinica is a web application designed for managing dental clinic operations, inc
 To get started with this project, clone the repository and install the necessary dependencies:
 
 ```bash
-git clone https://github.com/tu_nombre/tu_repositorio.git
-cd tu_repositorio
+git clone https://github.com/ForRealy/Clinica
+cd Clinica
 # Ensure you have Maven installed
 mvn clean install
 ```
