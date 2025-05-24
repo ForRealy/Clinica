@@ -32,6 +32,8 @@ public class DentistDashboardController {
         LocalDateTime threeDaysLater = now.plusDays(3).withHour(11).withMinute(0); // 11:00 AM three days later
         LocalDateTime yesterday = now.minusDays(1).withHour(15).withMinute(0); // 3:00 PM yesterday
         LocalDateTime fiveDaysAgo = now.minusDays(5).withHour(9).withMinute(30); // 9:30 AM five days ago
+        LocalDateTime nextWeek = now.plusDays(7).withHour(13).withMinute(0); // 1:00 PM next week
+        LocalDateTime twoWeeksLater = now.plusDays(14).withHour(15).withMinute(30); // 3:30 PM two weeks later
         
         // Pending visit for tomorrow morning
         Visit visit1 = new Visit();
@@ -41,6 +43,7 @@ public class DentistDashboardController {
         visit1.setDateTime(tomorrow);
         visit1.setReason("Regular checkup");
         visit1.setStatus(Visit.VisitStatus.PENDING);
+        visit1.setPatientEmail("john.smith@email.com");
         
         // Pending visit for day after tomorrow afternoon
         Visit visit2 = new Visit();
@@ -50,6 +53,7 @@ public class DentistDashboardController {
         visit2.setDateTime(dayAfterTomorrow);
         visit2.setReason("Tooth pain");
         visit2.setStatus(Visit.VisitStatus.PENDING);
+        visit2.setPatientEmail("emma.wilson@email.com");
         
         // Confirmed visit for three days later
         Visit visit3 = new Visit();
@@ -59,6 +63,7 @@ public class DentistDashboardController {
         visit3.setDateTime(threeDaysLater);
         visit3.setReason("Cleaning");
         visit3.setStatus(Visit.VisitStatus.CONFIRMED);
+        visit3.setPatientEmail("john.smith@email.com");
         
         // Completed visit from yesterday
         Visit visit4 = new Visit();
@@ -69,6 +74,7 @@ public class DentistDashboardController {
         visit4.setReason("Cavity filling");
         visit4.setStatus(Visit.VisitStatus.COMPLETED);
         visit4.setNotes("Patient had a cavity in molar #3. Filling completed successfully.");
+        visit4.setPatientEmail("emma.wilson@email.com");
         
         // Completed visit from five days ago
         Visit visit5 = new Visit();
@@ -79,28 +85,53 @@ public class DentistDashboardController {
         visit5.setReason("Root canal");
         visit5.setStatus(Visit.VisitStatus.COMPLETED);
         visit5.setNotes("Root canal procedure completed. Patient scheduled for follow-up in 2 weeks.");
+        visit5.setPatientEmail("john.smith@email.com");
+        
+        // New appointment for John Smith - Follow-up consultation
+        Visit visit6 = new Visit();
+        visit6.setId("6");
+        visit6.setPatientId("P001");
+        visit6.setDentistId(SARAH_ID);
+        visit6.setDateTime(nextWeek);
+        visit6.setReason("Follow-up consultation after root canal");
+        visit6.setStatus(Visit.VisitStatus.PENDING);
+        visit6.setPatientEmail("john.smith@email.com");
+        
+        // New appointment for Emma Wilson - Regular cleaning
+        Visit visit7 = new Visit();
+        visit7.setId("7");
+        visit7.setPatientId("P002");
+        visit7.setDentistId(SARAH_ID);
+        visit7.setDateTime(twoWeeksLater);
+        visit7.setReason("Regular dental cleaning");
+        visit7.setStatus(Visit.VisitStatus.PENDING);
+        visit7.setPatientEmail("emma.wilson@email.com");
         
         SAMPLE_VISITS.add(visit1);
         SAMPLE_VISITS.add(visit2);
         SAMPLE_VISITS.add(visit3);
         SAMPLE_VISITS.add(visit4);
         SAMPLE_VISITS.add(visit5);
+        SAMPLE_VISITS.add(visit6);
+        SAMPLE_VISITS.add(visit7);
     }
     
     @Autowired
     public DentistDashboardController(VisitService visitService) {
         this.visitService = visitService;
+        // Save all sample visits to the service
+        for (Visit visit : SAMPLE_VISITS) {
+            visitService.save(visit);
+        }
     }
     
     @GetMapping("/appointments")
     public String viewAppointments(Authentication authentication, Model model) {
         // For testing, we'll use Sarah's ID directly
         String dentistId = SARAH_ID;
-        List<Visit> pendingVisits = SAMPLE_VISITS.stream()
-                .filter(v -> v.getDentistId().equals(dentistId) && v.getStatus() == Visit.VisitStatus.PENDING)
-                .toList();
-        List<Visit> confirmedVisits = SAMPLE_VISITS.stream()
-                .filter(v -> v.getDentistId().equals(dentistId) && v.getStatus() == Visit.VisitStatus.CONFIRMED)
+        List<Visit> pendingVisits = visitService.findPendingByDentistId(dentistId);
+        List<Visit> confirmedVisits = visitService.findByDentistId(dentistId).stream()
+                .filter(v -> v.getStatus() == Visit.VisitStatus.CONFIRMED)
                 .toList();
         
         model.addAttribute("pendingVisits", pendingVisits);
@@ -112,9 +143,7 @@ public class DentistDashboardController {
     public String viewPatients(Authentication authentication, Model model) {
         // For testing, we'll use Sarah's ID directly
         String dentistId = SARAH_ID;
-        List<Visit> visits = SAMPLE_VISITS.stream()
-                .filter(v -> v.getDentistId().equals(dentistId))
-                .toList();
+        List<Visit> visits = visitService.findByDentistId(dentistId);
         
         model.addAttribute("visits", visits);
         return "dentist/patients";

@@ -30,7 +30,8 @@
                             <c:forEach items="${pendingVisits}" var="visit">
                                 <tr>
                                     <td>
-                                        <fmt:formatDate value="${visit.dateTime}" pattern="dd/MM/yyyy HH:mm"/>
+                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
+                                        <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
                                     </td>
                                     <td>${visit.patientId}</td>
                                     <td>${visit.reason}</td>
@@ -75,7 +76,8 @@
                             <c:forEach items="${confirmedVisits}" var="visit">
                                 <tr>
                                     <td>
-                                        <fmt:formatDate value="${visit.dateTime}" pattern="dd/MM/yyyy HH:mm"/>
+                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
+                                        <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
                                     </td>
                                     <td>${visit.patientId}</td>
                                     <td>${visit.reason}</td>
@@ -132,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     completeVisitModal.addEventListener('show.bs.modal', function(event) {
         const button = event.relatedTarget;
         const visitId = button.getAttribute('data-visit-id');
-        completeVisitForm.action = `/dental-clinic/visits/${visitId}/complete`;
+        completeVisitForm.action = '${pageContext.request.contextPath}/visits/' + visitId + '/complete';
     });
 });
 </script>

@@ -7,6 +7,7 @@ com/dental/clinic/controller/AuthController.class
 com/dental/clinic/repository/PatientRepository.class
 com/dental/clinic/config/WebConfig.class
 com/dental/clinic/repository/DentistRepository.class
+com/dental/clinic/controller/PatientAppointmentsController.class
 com/dental/clinic/model/Visit.class
 com/dental/clinic/model/Patient$PaymentMethod.class
 com/dental/clinic/service/BaseService.class
@@ -18,7 +19,9 @@ com/dental/clinic/model/User$UserRole.class
 com/dental/clinic/DentalClinicApplication.class
 com/dental/clinic/model/Dentist.class
 com/dental/clinic/config/DataInitializer.class
+com/dental/clinic/model/Visit$VisitStatus.class
 com/dental/clinic/service/VisitService.class
+com/dental/clinic/controller/PatientProfileController.class
 com/dental/clinic/model/User.class
 com/dental/clinic/controller/VisitController.class
 com/dental/clinic/model/Patient.class
@@ -27,3 +30,4 @@ com/dental/clinic/controller/HomeController.class
 com/dental/clinic/controller/PatientController.class
 com/dental/clinic/config/PasswordEncoderConfig.class
 com/dental/clinic/repository/UserRepository.class
+com/dental/clinic/controller/DentistDashboardController.class
