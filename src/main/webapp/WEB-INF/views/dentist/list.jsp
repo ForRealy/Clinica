@@ -37,11 +37,8 @@
                                     data-dentist-phone="${dentist.phone}"
                                     data-dentist-email="${dentist.email}"
                                     data-dentist-specialty="${dentist.specialty}">
-                                Edit
+                                <i class="fas fa-edit"></i> Edit
                             </button>
-                            <a href="<c:url value='/visits/dentist/${dentist.id}'/>" class="btn btn-sm btn-info">
-                                View Visits
-                            </a>
                         </td>
                     </tr>
                 </c:forEach>
