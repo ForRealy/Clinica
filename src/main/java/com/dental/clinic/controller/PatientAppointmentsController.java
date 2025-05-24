@@ -3,16 +3,15 @@ package com.dental.clinic.controller;
 import com.dental.clinic.model.Visit;
 import com.dental.clinic.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -31,20 +30,46 @@ public class PatientAppointmentsController {
         String patientEmail = authentication.getName();
         List<Visit> appointments = visitService.findByPatientEmail(patientEmail);
         model.addAttribute("appointments", appointments);
+        
+        // Add min and max dates for the date picker
+        LocalDateTime now = LocalDateTime.now();
+        model.addAttribute("minDate", now);
+        model.addAttribute("maxDate", now.plusDays(30));
+        
         return "patient/appointments";
     }
 
     @PostMapping("/appointments/request")
-    public String requestAppointment(@ModelAttribute Visit visit, Authentication authentication, RedirectAttributes redirectAttributes) {
-        String patientEmail = authentication.getName();
-        if (visitService.findByPatientEmail(patientEmail).size() > 0) {
-            redirectAttributes.addFlashAttribute("errorMessage", "You already have an appointment.");
-            return "redirect:/patient/appointments";
+    public String requestAppointment(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+            @RequestParam String reason,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes) {
+        try {
+            String patientEmail = authentication.getName();
+            
+            // Check if patient already has a pending appointment
+            if (visitService.findByPatientEmail(patientEmail).stream()
+                    .anyMatch(v -> v.getStatus() == Visit.VisitStatus.PENDING)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "You already have a pending appointment.");
+                return "redirect:/patient/appointments";
+            }
+            
+            // Create and save the visit
+            Visit visit = new Visit();
+            visit.setPatientEmail(patientEmail);
+            visit.setDateTime(dateTime);
+            visit.setReason(reason);
+            visit.setStatus(Visit.VisitStatus.PENDING);
+            
+            // Set a default dentist (you might want to modify this based on your requirements)
+            visit.setDentistId("1"); // Using Sarah's ID as default
+            
+            visitService.save(visit);
+            redirectAttributes.addFlashAttribute("successMessage", "Appointment requested successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error requesting appointment: " + e.getMessage());
         }
-        visit.setPatientEmail(patientEmail);
-        visit.setStatus(Visit.VisitStatus.PENDING);
-        visitService.save(visit);
-        redirectAttributes.addFlashAttribute("successMessage", "Appointment requested successfully.");
         return "redirect:/patient/appointments";
     }
 } 

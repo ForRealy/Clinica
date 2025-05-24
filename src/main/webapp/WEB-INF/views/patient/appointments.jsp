@@ -1,42 +1,138 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="/WEB-INF/views/layout/header.jsp" />
 
 <div class="container mt-4">
-    <h2>My Appointment</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Appointments</h2>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">
+            Schedule New Appointment
+        </button>
+    </div>
+
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
     </c:if>
     <c:if test="${not empty errorMessage}">
         <div class="alert alert-danger">${errorMessage}</div>
     </c:if>
+
     <c:choose>
         <c:when test="${not empty appointments}">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Date & Time</th>
-                        <th>Dentist</th>
-                        <th>Status</th>
-                        <th>Reason</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${appointments}" var="visit">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>${visit.dateTime}</td>
-                            <td>${visit.dentistId}</td>
-                            <td>${visit.status}</td>
-                            <td>${visit.reason}</td>
+                            <th>Date & Time</th>
+                            <th>Dentist</th>
+                            <th>Status</th>
+                            <th>Reason</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${appointments}" var="visit">
+                            <tr>
+                                <td>
+                                    <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both"/>
+                                    <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
+                                </td>
+                                <td>${visit.dentistId}</td>
+                                <td>
+                                    <span class="badge ${visit.status == 'COMPLETED' ? 'bg-success' : 
+                                                      visit.status == 'CONFIRMED' ? 'bg-primary' : 
+                                                      visit.status == 'PENDING' ? 'bg-warning' : 'bg-danger'}">
+                                        ${visit.status}
+                                    </span>
+                                </td>
+                                <td>${visit.reason}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </c:when>
         <c:otherwise>
             <div class="alert alert-info">You have no appointments scheduled.</div>
-            <a href="/dental-clinic/visits/schedule" class="btn btn-primary">Request Appointment</a>
         </c:otherwise>
     </c:choose>
 </div>
+
+<!-- New Appointment Modal -->
+<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newAppointmentModalLabel">Schedule New Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="<c:url value='/patient/appointments/request'/>" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="dateTime" class="form-label">Date & Time</label>
+                        <input type="datetime-local" class="form-control" id="dateTime" name="dateTimeStr" required
+                               min="${minDate}" max="${maxDate}" step="1">
+                        <input type="hidden" id="dateTimeWithSeconds" name="dateTime">
+                        <small class="text-muted">Appointments are available Monday to Friday, 8:00 AM to 3:00 PM</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Reason for Visit</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="3" required 
+                                  placeholder="Please describe the reason for your visit..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Request Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateTimeInput = document.getElementById('dateTime');
+    const dateTimeWithSecondsInput = document.getElementById('dateTimeWithSeconds');
+    
+    // Set min and max dates (next 30 days)
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setHours(8, 0, 0, 0); // Set to 8:00 AM
+    
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 30);
+    maxDate.setHours(15, 0, 0, 0); // Set to 3:00 PM
+    
+    // Format dates for input min/max
+    const formatDate = (date) => {
+        return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+    };
+    
+    dateTimeInput.min = formatDate(minDate);
+    dateTimeInput.max = formatDate(maxDate);
+    
+    // Update hidden input with seconds when the visible input changes
+    dateTimeInput.addEventListener('change', function() {
+        const selectedDate = new Date(this.value);
+        const day = selectedDate.getDay();
+        const hours = selectedDate.getHours();
+        
+        if (day === 0 || day === 6) {
+            alert('Appointments are not available on weekends.');
+            this.value = '';
+            dateTimeWithSecondsInput.value = '';
+        } else if (hours < 8 || hours >= 15) {
+            alert('Appointments are only available between 8 AM and 3 PM.');
+            this.value = '';
+            dateTimeWithSecondsInput.value = '';
+        } else {
+            // Add seconds to the datetime string
+            dateTimeWithSecondsInput.value = this.value + ':00';
+        }
+    });
+});
+</script>
+
 <jsp:include page="/WEB-INF/views/layout/footer.jsp" /> 

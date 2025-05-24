@@ -30,7 +30,7 @@
                             <c:forEach items="${pendingVisits}" var="visit">
                                 <tr>
                                     <td>
-                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
+                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
                                         <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
                                     </td>
                                     <td>${visit.patientId}</td>
@@ -76,7 +76,7 @@
                             <c:forEach items="${confirmedVisits}" var="visit">
                                 <tr>
                                     <td>
-                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
+                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
                                         <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
                                     </td>
                                     <td>${visit.patientId}</td>
