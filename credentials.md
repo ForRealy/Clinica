@@ -1,13 +1,17 @@
 Admin:
-Username: admin
-Password: admin
+admin
+admin
 
 Dentists:
-Username: sarah.johnson
-Password: password123
-Username: michael.chen
-Password: password123
+sarah.johnson@dentalclinic.com
+123456789
 
-Patient:
-Username: john.smith
-Password: password123
+michael.chen@dentalclinic.com
+987654321
+
+Patients:
+john.smith@email.com
+password123
+
+emma.wilson@email.com
+emma2024

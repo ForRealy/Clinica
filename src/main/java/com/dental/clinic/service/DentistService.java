@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalTime;
 
 @Service
 public class DentistService implements BaseService<Dentist> {
@@ -39,5 +40,13 @@ public class DentistService implements BaseService<Dentist> {
     @Override
     public boolean exists(String id) {
         return dentistRepository.exists(id);
+    }
+
+    public boolean isWorkingHour(String dentistId, LocalTime time) {
+        // Default working hours: 9:00 AM to 5:00 PM
+        LocalTime startTime = LocalTime.of(9, 0);
+        LocalTime endTime = LocalTime.of(17, 0);
+        
+        return !time.isBefore(startTime) && !time.isAfter(endTime);
     }
 } 

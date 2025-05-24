@@ -4,6 +4,8 @@
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/repository/UserRepository.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/repository/DentistRepository.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/PatientController.java
+/home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/DentistDashboardController.java
+/home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/PatientAppointmentsController.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/DentalClinicApplication.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/repository/VisitRepository.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/model/Visit.java
@@ -13,6 +15,7 @@
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/repository/PatientRepository.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/AuthController.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/config/CustomUserDetailsService.java
+/home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/PatientProfileController.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/AdminDashboardController.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/service/DentistService.java
 /home/atome/Documentos/Clinica/src/main/java/com/dental/clinic/controller/VisitController.java

@@ -52,4 +52,8 @@ public class PatientService implements BaseService<Patient> {
         }
         return save(patient);
     }
+    
+    public Optional<Patient> findByEmail(String email) {
+        return patientRepository.findByEmail(email);
+    }
 } 

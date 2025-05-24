@@ -2,7 +2,6 @@ package com.dental.clinic.controller;
 
 import com.dental.clinic.model.Dentist;
 import com.dental.clinic.model.User;
-import com.dental.clinic.model.User.UserRole;
 import com.dental.clinic.service.DentistService;
 import com.dental.clinic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,55 +34,53 @@ public class DentistController {
         return "dentist/list";
     }
     
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("dentist", new Dentist());
-        return "dentist/form";
-    }
-    
     @PostMapping
-    public String createDentist(@ModelAttribute Dentist dentist, @RequestParam String username, @RequestParam String password) {
-        // Save the dentist first
-        Dentist savedDentist = dentistService.save(dentist);
-        
-        // Create and save the user account
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(UserRole.DENTIST);
-        user.setAssociatedDentistId(savedDentist.getId());
-        userService.save(user);
-        
+    public String createDentist(@ModelAttribute Dentist dentist, RedirectAttributes redirectAttributes) {
+        try {
+            // Save the dentist first
+            dentistService.save(dentist);
+            
+            // Check if a user with this email already exists
+            if (userService.findByUsername(dentist.getEmail()).isEmpty()) {
+                // Create a user account for the dentist
+                User user = new User();
+                user.setUsername(dentist.getEmail());
+                user.setPassword(passwordEncoder.encode(dentist.getPhone()));
+                user.setRole(User.UserRole.DENTIST);
+                user.setAssociatedDentistId(dentist.getId());
+                userService.save(user);
+            }
+            
+            redirectAttributes.addFlashAttribute("successMessage", "Dentist created successfully");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/admin/dentists";
-    }
-    
-    @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable String id, Model model) {
-        dentistService.findById(id).ifPresent(dentist -> model.addAttribute("dentist", dentist));
-        return "dentist/form";
     }
     
     @PostMapping("/{id}")
-    public String updateDentist(@PathVariable String id, @ModelAttribute Dentist dentist) {
-        dentist.setId(id);
-        dentistService.save(dentist);
-        return "redirect:/admin/dentists";
-    }
-    
-    @PostMapping("/{id}/delete")
-    public String deleteDentist(@PathVariable String id, RedirectAttributes redirectAttributes) {
+    public String updateDentist(@PathVariable String id, @ModelAttribute Dentist dentist, RedirectAttributes redirectAttributes) {
         try {
-            // Find and delete the associated user first
+            dentist.setId(id);
+            
+            // Save the dentist
+            dentistService.save(dentist);
+            
+            // Find the existing user associated with this dentist
             userService.findAll().stream()
                 .filter(user -> id.equals(user.getAssociatedDentistId()))
                 .findFirst()
-                .ifPresent(user -> userService.delete(user.getId()));
+                .ifPresent(user -> {
+                    // Update the user's email if it has changed
+                    if (!user.getUsername().equals(dentist.getEmail())) {
+                        user.setUsername(dentist.getEmail());
+                        userService.save(user);
+                    }
+                });
             
-            // Then delete the dentist
-            dentistService.delete(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Dentist deleted successfully");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting dentist: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("successMessage", "Dentist updated successfully");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/admin/dentists";
     }

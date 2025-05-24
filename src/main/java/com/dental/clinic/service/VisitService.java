@@ -1,68 +1,79 @@
 package com.dental.clinic.service;
 
 import com.dental.clinic.model.Visit;
-import com.dental.clinic.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class VisitService implements BaseService<Visit> {
-    private final VisitRepository visitRepository;
+public class VisitService {
+    private final Map<String, Visit> visits = new HashMap<>();
+    private final DentistService dentistService;
     
     @Autowired
-    public VisitService(VisitRepository visitRepository) {
-        this.visitRepository = visitRepository;
+    public VisitService(DentistService dentistService) {
+        this.dentistService = dentistService;
     }
     
-    @Override
     public Visit save(Visit visit) {
-        validateVisit(visit);
-        return visitRepository.save(visit);
+        visits.put(visit.getId(), visit);
+        return visit;
     }
     
-    @Override
     public Optional<Visit> findById(String id) {
-        return visitRepository.findById(id);
+        return Optional.ofNullable(visits.get(id));
     }
     
-    @Override
     public List<Visit> findAll() {
-        return visitRepository.findAll();
-    }
-    
-    @Override
-    public void delete(String id) {
-        visitRepository.delete(id);
-    }
-    
-    @Override
-    public boolean exists(String id) {
-        return visitRepository.exists(id);
+        return new ArrayList<>(visits.values());
     }
     
     public List<Visit> findByDentistId(String dentistId) {
-        return visitRepository.findByDentistId(dentistId);
+        return visits.values().stream()
+                .filter(visit -> visit.getDentistId().equals(dentistId))
+                .collect(Collectors.toList());
     }
     
-    private void validateVisit(Visit visit) {
-        if (!visit.isValidAppointment()) {
-            throw new IllegalArgumentException("Invalid appointment time: must be during working hours and not on weekends");
-        }
-        
-        if (visitRepository.hasOverlappingAppointment(visit)) {
-            throw new IllegalArgumentException("Dentist already has an appointment at this time");
-        }
+    public List<Visit> findByPatientId(String patientId) {
+        return visits.values().stream()
+                .filter(visit -> visit.getPatientId().equals(patientId))
+                .collect(Collectors.toList());
     }
     
-    public Visit addPostVisitNotes(String visitId, String observations, String prescribedTreatments) {
-        Visit visit = findById(visitId)
-                .orElseThrow(() -> new IllegalArgumentException("Visit not found"));
+    public List<Visit> findPendingByDentistId(String dentistId) {
+        return visits.values().stream()
+                .filter(visit -> visit.getDentistId().equals(dentistId) 
+                        && visit.getStatus() == Visit.VisitStatus.PENDING)
+                .collect(Collectors.toList());
+    }
+    
+    public void delete(String id) {
+        visits.remove(id);
+    }
+    
+    public boolean isTimeSlotAvailable(String dentistId, LocalDateTime dateTime) {
+        // Check if it's a weekend
+        if (dateTime.getDayOfWeek().getValue() >= 6) {
+            return false;
+        }
         
-        visit.setObservations(observations);
-        visit.setPrescribedTreatments(prescribedTreatments);
+        // Check if it's within working hours
+        if (!dentistService.isWorkingHour(dentistId, dateTime.toLocalTime())) {
+            return false;
+        }
         
-        return visitRepository.save(visit);
+        // Check if the time slot is already booked
+        return visits.values().stream()
+                .filter(visit -> visit.getDentistId().equals(dentistId))
+                .filter(visit -> visit.getStatus() != Visit.VisitStatus.CANCELLED)
+                .noneMatch(visit -> visit.getDateTime().equals(dateTime));
+    }
+    
+    public List<Visit> findByPatientEmail(String patientEmail) {
+        return visits.values().stream()
+                .filter(visit -> visit.getPatientEmail().equals(patientEmail))
+                .collect(Collectors.toList());
     }
 } 

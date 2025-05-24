@@ -9,6 +9,8 @@ public class Dentist {
     private String id;
     private String fullName;
     private String specialty;
+    private String email;
+    private String phone;
     private LocalTime startTime;
     private LocalTime endTime;
     

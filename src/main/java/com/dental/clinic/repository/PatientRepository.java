@@ -36,4 +36,10 @@ public class PatientRepository implements BaseRepository<Patient> {
     public boolean exists(String id) {
         return patients.containsKey(id);
     }
+    
+    public Optional<Patient> findByEmail(String email) {
+        return patients.values().stream()
+                .filter(patient -> patient.getEmail().equalsIgnoreCase(email))
+                .findFirst();
+    }
 } 
