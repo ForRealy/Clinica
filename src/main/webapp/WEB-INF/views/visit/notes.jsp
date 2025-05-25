@@ -5,36 +5,36 @@
 
 <div class="row">
     <div class="col-md-6 offset-md-3">
-        <h2>Visit Notes</h2>
+        <h2>Notas de la Visita</h2>
         <hr>
         
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">Appointment Details</h5>
-                <p><strong>Patient:</strong> ${visit.patient.name}</p>
-                <p><strong>Dentist:</strong> ${visit.dentist.fullName}</p>
-                <p><strong>Date & Time:</strong> 
+                <h5 class="card-title">Detalles de la Cita</h5>
+                <p><strong>Paciente:</strong> ${visit.patient.name}</p>
+                <p><strong>Dentista:</strong> ${visit.dentist.fullName}</p>
+                <p><strong>Fecha y Hora:</strong> 
                     <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
-                    <fmt:formatDate value="${parsedDate}" pattern="MMM dd, yyyy HH:mm" />
+                    <fmt:formatDate value="${parsedDate}" pattern="dd MMM, yyyy HH:mm" />
                 </p>
-                <p><strong>Purpose:</strong> ${visit.purpose}</p>
+                <p><strong>Motivo:</strong> ${visit.purpose}</p>
             </div>
         </div>
         
         <form action="/admin/visits/${visit.id}/notes" method="post">
             <div class="mb-3">
-                <label for="observations" class="form-label">Observations</label>
+                <label for="observations" class="form-label">Observaciones</label>
                 <textarea class="form-control" id="observations" name="observations" rows="4" required>${visit.observations}</textarea>
             </div>
             
             <div class="mb-3">
-                <label for="prescribedTreatments" class="form-label">Prescribed Treatments</label>
+                <label for="prescribedTreatments" class="form-label">Tratamientos Prescritos</label>
                 <textarea class="form-control" id="prescribedTreatments" name="prescribedTreatments" rows="4" required>${visit.prescribedTreatments}</textarea>
             </div>
             
             <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Save Notes</button>
-                <a href="/admin/visits" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Guardar Notas</button>
+                <a href="/admin/visits" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

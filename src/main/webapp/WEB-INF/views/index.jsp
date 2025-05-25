@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Dental Clinic Management System</title>
+    <title>Sistema de Gestión de Clínica Dental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .feature-card {
@@ -65,30 +65,30 @@
     <div class="container mt-4">
         <sec:authorize access="isAuthenticated()">
             <div class="welcome-section">
-                <h1 class="mb-4">Welcome to Dental Clinic Management System</h1>
-                <p class="lead">You are logged in as <strong><sec:authentication property="name"/></strong></p>
+                <h1 class="mb-4">Bienvenido al Sistema de Gestión de Clínica Dental</h1>
+                <p class="lead">Has iniciado sesión como <strong><sec:authentication property="name"/></strong></p>
             </div>
         </sec:authorize>
         
         <sec:authorize access="!isAuthenticated()">
             <div class="welcome-section">
-                <h1 class="mb-4">Welcome to Dental Clinic Management System</h1>
-                <p class="lead mb-5">Your trusted partner in dental care</p> 
+                <h1 class="mb-4">Bienvenido al Sistema de Gestión de Clínica Dental</h1>
+                <p class="lead mb-5">Tu socio de confianza en el cuidado dental</p> 
             </div>
         </sec:authorize>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Sección Hero -->
     <div class="hero-section position-relative">
         <div class="hero-image" style="background-image: url('${pageContext.request.contextPath}/images/dental-hero.jpg');">
             <div class="overlay"></div>
             <div class="container position-relative">
                 <div class="row min-vh-75 align-items-center">
                     <div class="col-md-8 text-white">
-                        <h1 class="display-4 fw-bold mb-4">Welcome to Our Dental Clinic</h1>
-                        <p class="lead mb-4">Experience exceptional dental care in a comfortable and modern environment. Our team of skilled professionals is dedicated to your oral health.</p>
+                        <h1 class="display-4 fw-bold mb-4">Bienvenido a Nuestra Clínica Dental</h1>
+                        <p class="lead mb-4">Experimenta un cuidado dental excepcional en un ambiente cómodo y moderno. Nuestro equipo de profesionales calificados está dedicado a tu salud bucal.</p>
                         <div class="d-flex gap-3">
-                            <a href="#services" class="btn btn-outline-light btn-lg">Our Services</a>
+                            <a href="#services" class="btn btn-outline-light btn-lg">Nuestros Servicios</a>
                         </div>
                     </div>
                 </div>
@@ -96,35 +96,35 @@
         </div>
     </div>
 
-    <!-- Services Section -->
+    <!-- Sección de Servicios -->
     <section id="services" class="py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Our Services</h2>
+            <h2 class="text-center mb-5">Nuestros Servicios</h2>
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
-                        <img src="${pageContext.request.contextPath}/images/general-dentistry.jpg" class="card-img-top" alt="General Dentistry">
+                        <img src="${pageContext.request.contextPath}/images/general-dentistry.jpg" class="card-img-top" alt="Odontología General">
                         <div class="card-body text-center">
-                            <h5 class="card-title">General Dentistry</h5>
-                            <p class="card-text">Comprehensive dental care including check-ups, cleanings, and preventive treatments.</p>
+                            <h5 class="card-title">Odontología General</h5>
+                            <p class="card-text">Cuidado dental integral que incluye revisiones, limpiezas y tratamientos preventivos.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
-                        <img src="${pageContext.request.contextPath}/images/cosmetic-dentistry.jpg" class="card-img-top" alt="Cosmetic Dentistry">
+                        <img src="${pageContext.request.contextPath}/images/cosmetic-dentistry.jpg" class="card-img-top" alt="Odontología Estética">
                         <div class="card-body text-center">
-                            <h5 class="card-title">Cosmetic Dentistry</h5>
-                            <p class="card-text">Transform your smile with our range of cosmetic dental procedures.</p>
+                            <h5 class="card-title">Odontología Estética</h5>
+                            <p class="card-text">Transforma tu sonrisa con nuestra gama de procedimientos dentales estéticos.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm">
-                        <img src="${pageContext.request.contextPath}/images/orthodontics.jpg" class="card-img-top" alt="Orthodontics">
+                        <img src="${pageContext.request.contextPath}/images/orthodontics.jpg" class="card-img-top" alt="Ortodoncia">
                         <div class="card-body text-center">
-                            <h5 class="card-title">Orthodontics</h5>
-                            <p class="card-text">Modern orthodontic solutions for a perfectly aligned smile.</p>
+                            <h5 class="card-title">Ortodoncia</h5>
+                            <p class="card-text">Soluciones ortodónticas modernas para una sonrisa perfectamente alineada.</p>
                         </div>
                     </div>
                 </div>
@@ -132,37 +132,37 @@
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
+    <!-- Sección Por Qué Elegirnos -->
     <section class="bg-light py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Why Choose Us</h2>
+            <h2 class="text-center mb-5">Por Qué Elegirnos</h2>
             <div class="row g-4">
                 <div class="col-md-3">
                     <div class="text-center">
                         <i class="fas fa-user-md fa-3x text-primary mb-3"></i>
-                        <h5>Expert Team</h5>
-                        <p>Highly qualified and experienced dental professionals</p>
+                        <h5>Equipo Experto</h5>
+                        <p>Profesionales dentales altamente calificados y con experiencia</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="text-center">
                         <i class="fas fa-clock fa-3x text-primary mb-3"></i>
-                        <h5>Flexible Hours</h5>
-                        <p>Convenient appointment times to fit your schedule</p>
+                        <h5>Horarios Flexibles</h5>
+                        <p>Horarios de cita convenientes que se adaptan a tu agenda</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="text-center">
                         <i class="fas fa-tooth fa-3x text-primary mb-3"></i>
-                        <h5>Modern Equipment</h5>
-                        <p>State-of-the-art dental technology and facilities</p>
+                        <h5>Equipamiento Moderno</h5>
+                        <p>Tecnología dental y instalaciones de última generación</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="text-center">
                         <i class="fas fa-heart fa-3x text-primary mb-3"></i>
-                        <h5>Patient Care</h5>
-                        <p>Personalized attention and comfortable experience</p>
+                        <h5>Atención al Paciente</h5>
+                        <p>Atención personalizada y experiencia cómoda</p>
                     </div>
                 </div>
             </div>

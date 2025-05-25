@@ -4,22 +4,22 @@
 <jsp:include page="/WEB-INF/views/layout/header.jsp" />
 
 <div class="container mt-4">
-    <h2>My Patients</h2>
+    <h2>Mis Pacientes</h2>
     
     <div class="card">
         <div class="card-body">
             <c:if test="${empty visits}">
-                <p class="text-muted">No patients found.</p>
+                <p class="text-muted">No se encontraron pacientes.</p>
             </c:if>
             <c:if test="${not empty visits}">
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Patient ID</th>
-                                <th>Last Visit</th>
-                                <th>Status</th>
-                                <th>Notes</th>
+                                <th>ID del Paciente</th>
+                                <th>Última Visita</th>
+                                <th>Estado</th>
+                                <th>Notas</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,7 +34,9 @@
                                         <span class="badge ${visit.status == 'COMPLETED' ? 'bg-success' : 
                                                           visit.status == 'CONFIRMED' ? 'bg-primary' : 
                                                           visit.status == 'PENDING' ? 'bg-warning' : 'bg-danger'}">
-                                            ${visit.status}
+                                            ${visit.status == 'COMPLETED' ? 'COMPLETADA' : 
+                                              visit.status == 'CONFIRMED' ? 'CONFIRMADA' : 
+                                              visit.status == 'PENDING' ? 'PENDIENTE' : 'CANCELADA'}
                                         </span>
                                     </td>
                                     <td>${visit.notes}</td>

@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2>Welcome to Dental Clinic Management System</h2>
+        <h2>Bienvenido al Sistema de Gestión de Clínica Dental</h2>
         <hr>
     </div>
 </div>
@@ -14,9 +14,9 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Dentists</h5>
-                    <p class="card-text">Manage dental staff and their schedules.</p>
-                    <a href="${pageContext.request.contextPath}/admin/dentists" class="btn btn-primary">Manage Dentists</a>
+                    <h5 class="card-title">Dentistas</h5>
+                    <p class="card-text">Gestionar el personal dental y sus horarios.</p>
+                    <a href="${pageContext.request.contextPath}/admin/dentists" class="btn btn-primary">Gestionar Dentistas</a>
                 </div>
             </div>
         </div>
@@ -24,9 +24,9 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Patients</h5>
-                    <p class="card-text">Manage patient records and information.</p>
-                    <a href="${pageContext.request.contextPath}/admin/patients" class="btn btn-primary">Manage Patients</a>
+                    <h5 class="card-title">Pacientes</h5>
+                    <p class="card-text">Gestionar registros e información de pacientes.</p>
+                    <a href="${pageContext.request.contextPath}/admin/patients" class="btn btn-primary">Gestionar Pacientes</a>
                 </div>
             </div>
         </div>
@@ -34,9 +34,9 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Appointments</h5>
-                    <p class="card-text">Schedule and manage patient visits.</p>
-                    <a href="${pageContext.request.contextPath}/admin/visits" class="btn btn-primary">Manage Appointments</a>
+                    <h5 class="card-title">Citas</h5>
+                    <p class="card-text">Programar y gestionar visitas de pacientes.</p>
+                    <a href="${pageContext.request.contextPath}/admin/visits" class="btn btn-primary">Gestionar Citas</a>
                 </div>
             </div>
         </div>
@@ -48,9 +48,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">My Appointments</h5>
-                    <p class="card-text">View and manage your scheduled appointments.</p>
-                    <a href="${pageContext.request.contextPath}/dentist/appointments" class="btn btn-primary">View Appointments</a>
+                    <h5 class="card-title">Mis Citas</h5>
+                    <p class="card-text">Ver y gestionar tus citas programadas.</p>
+                    <a href="${pageContext.request.contextPath}/dentist/appointments" class="btn btn-primary">Ver Citas</a>
                 </div>
             </div>
         </div>

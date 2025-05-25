@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login - Dental Clinic</title>
+    <title>Iniciar Sesión - Clínica Dental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .login-container {
@@ -19,32 +19,32 @@
 <body>
     <div class="container">
         <div class="login-container">
-            <h2 class="text-center mb-4">Dental Clinic Login</h2>
+            <h2 class="text-center mb-4">Iniciar Sesión en Clínica Dental</h2>
             
             <c:if test="${param.error != null}">
                 <div class="alert alert-danger">
-                    Invalid username or password.
+                    Usuario o contraseña inválidos.
                 </div>
             </c:if>
             
             <c:if test="${param.logout != null}">
                 <div class="alert alert-success">
-                    You have been logged out successfully.
+                    Has cerrado sesión exitosamente.
                 </div>
             </c:if>
             
             <form action="${pageContext.request.contextPath}/login" method="post">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
+                    <label for="username" class="form-label">Usuario</label>
                     <input type="text" class="form-control" id="username" name="username" required>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
             </form>
         </div>
     </div>

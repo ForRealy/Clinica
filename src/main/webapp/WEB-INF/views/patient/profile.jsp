@@ -3,31 +3,31 @@
 <jsp:include page="/WEB-INF/views/layout/header.jsp" />
 
 <div class="container mt-4">
-    <h2>My Profile</h2>
+    <h2>Mi Perfil</h2>
     <div class="card mb-4">
         <div class="card-body">
-            <h5 class="card-title">Personal Details</h5>
+            <h5 class="card-title">Datos Personales</h5>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>Name:</strong> ${patient.fullName}</li>
-                <li class="list-group-item"><strong>Email:</strong> ${patient.email}</li>
-                <li class="list-group-item"><strong>Phone:</strong> ${patient.phone}</li>
-                <li class="list-group-item"><strong>Birthdate:</strong> ${patient.dateOfBirth}</li>
-                <li class="list-group-item"><strong>Payment Method:</strong> ${patient.paymentMethod}</li>
+                <li class="list-group-item"><strong>Nombre:</strong> ${patient.fullName}</li>
+                <li class="list-group-item"><strong>Correo:</strong> ${patient.email}</li>
+                <li class="list-group-item"><strong>Teléfono:</strong> ${patient.phone}</li>
+                <li class="list-group-item"><strong>Fecha de Nacimiento:</strong> ${patient.dateOfBirth}</li>
+                <li class="list-group-item"><strong>Método de Pago:</strong> ${patient.paymentMethod}</li>
             </ul>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Completed Visits & Prescriptions</h5>
+            <h5 class="card-title">Visitas Completadas y Recetas</h5>
             <c:choose>
                 <c:when test="${not empty completedVisits}">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Date & Time</th>
-                                <th>Dentist</th>
-                                <th>Reason</th>
-                                <th>Prescription/Notes</th>
+                                <th>Fecha y Hora</th>
+                                <th>Dentista</th>
+                                <th>Motivo</th>
+                                <th>Receta/Notas</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,7 +43,7 @@
                     </table>
                 </c:when>
                 <c:otherwise>
-                    <div class="alert alert-info">No completed visits yet.</div>
+                    <div class="alert alert-info">Aún no hay visitas completadas.</div>
                 </c:otherwise>
             </c:choose>
         </div>
