@@ -80,7 +80,7 @@ Una aplicación web completa para gestionar una clínica dental, construida con 
 ### Instalación
 1. Clonar el repositorio
 ```bash
-git clone [url-del-repositorio]
+git clone https://github.com/ForRealy/Clinica
 ```
 
 2. Navegar al directorio del proyecto
