@@ -141,12 +141,5 @@ mvn spring-boot:run
 - La protección CSRF está habilitada
 - Se implementa control de acceso basado en roles
 
-## Contribuir
-1. Hacer fork del repositorio
-2. Crear una rama de características
-3. Hacer commit de los cambios
-4. Subir a la rama
-5. Crear una Pull Request
-
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para más detalles. 
