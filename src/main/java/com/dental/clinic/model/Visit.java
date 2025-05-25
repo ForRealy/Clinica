@@ -14,6 +14,7 @@ public class Visit {
     private VisitStatus status;
     private String notes;
     private String patientEmail;
+    private String patientName;  // For display purposes
     
     public enum VisitStatus {
         PENDING,    // Nueva solicitud pendiente de confirmación
@@ -46,5 +47,13 @@ public class Visit {
 
     public void setPatientEmail(String patientEmail) {
         this.patientEmail = patientEmail;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
     }
 } 

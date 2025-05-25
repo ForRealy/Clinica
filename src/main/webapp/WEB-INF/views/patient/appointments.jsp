@@ -66,14 +66,12 @@
                 <h5 class="modal-title" id="newAppointmentModalLabel">Schedule New Appointment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<c:url value='/patient/appointments/request'/>" method="post">
+            <form action="appointments/request" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="dateTime" class="form-label">Date & Time</label>
-                        <input type="datetime-local" class="form-control" id="dateTime" name="dateTimeStr" required
-                               min="${minDate}" max="${maxDate}" step="1">
-                        <input type="hidden" id="dateTimeWithSeconds" name="dateTime">
-                        <small class="text-muted">Appointments are available Monday to Friday, 8:00 AM to 3:00 PM</small>
+                        <input type="datetime-local" class="form-control" id="dateTime" name="dateTimeStr" required>
+                        <small class="text-muted">Appointments are available Monday to Friday, 9:00 AM to 5:00 PM</small>
                     </div>
                     
                     <div class="mb-3">
@@ -94,16 +92,15 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const dateTimeInput = document.getElementById('dateTime');
-    const dateTimeWithSecondsInput = document.getElementById('dateTimeWithSeconds');
     
     // Set min and max dates (next 30 days)
     const today = new Date();
     const minDate = new Date(today);
-    minDate.setHours(8, 0, 0, 0); // Set to 8:00 AM
+    minDate.setHours(9, 0, 0, 0); // Set to 9:00 AM
     
     const maxDate = new Date(today);
     maxDate.setDate(maxDate.getDate() + 30);
-    maxDate.setHours(15, 0, 0, 0); // Set to 3:00 PM
+    maxDate.setHours(17, 0, 0, 0); // Set to 5:00 PM
     
     // Format dates for input min/max
     const formatDate = (date) => {
@@ -113,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dateTimeInput.min = formatDate(minDate);
     dateTimeInput.max = formatDate(maxDate);
     
-    // Update hidden input with seconds when the visible input changes
+    // Validate date and time when input changes
     dateTimeInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
         const day = selectedDate.getDay();
@@ -122,14 +119,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (day === 0 || day === 6) {
             alert('Appointments are not available on weekends.');
             this.value = '';
-            dateTimeWithSecondsInput.value = '';
-        } else if (hours < 8 || hours >= 15) {
-            alert('Appointments are only available between 8 AM and 3 PM.');
+        } else if (hours < 9 || hours >= 17) {
+            alert('Appointments are only available between 9 AM and 5 PM.');
             this.value = '';
-            dateTimeWithSecondsInput.value = '';
-        } else {
-            // Add seconds to the datetime string
-            dateTimeWithSecondsInput.value = this.value + ':00';
         }
     });
 });

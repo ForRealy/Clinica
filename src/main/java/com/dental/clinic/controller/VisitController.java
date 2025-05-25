@@ -40,9 +40,26 @@ public class VisitController {
                 .filter(v -> v.getStatus() == Visit.VisitStatus.CONFIRMED)
                 .toList();
         
+        // Add patient information to each visit
+        pendingVisits.forEach(visit -> {
+            if (visit.getPatientName() == null || visit.getPatientName().isEmpty()) {
+                patientService.findById(visit.getPatientId()).ifPresent(patient -> {
+                    visit.setPatientName(patient.getFullName());
+                });
+            }
+        });
+        
+        confirmedVisits.forEach(visit -> {
+            if (visit.getPatientName() == null || visit.getPatientName().isEmpty()) {
+                patientService.findById(visit.getPatientId()).ifPresent(patient -> {
+                    visit.setPatientName(patient.getFullName());
+                });
+            }
+        });
+        
         model.addAttribute("pendingVisits", pendingVisits);
         model.addAttribute("confirmedVisits", confirmedVisits);
-        return "visit/dentist-list";
+        return "dentist/appointments";  // Use the same view as /dentist/appointments
     }
     
     @PostMapping("/request")
@@ -52,6 +69,13 @@ public class VisitController {
             if (!visitService.isTimeSlotAvailable(visit.getDentistId(), visit.getDateTime())) {
                 redirectAttributes.addFlashAttribute("errorMessage", "This time slot is not available");
                 return "redirect:/patients/appointments";
+            }
+            
+            // Set patient name from the patient service
+            if (visit.getPatientId() != null) {  // Only try to find patient if ID is not null
+                patientService.findById(visit.getPatientId()).ifPresent(patient -> {
+                    visit.setPatientName(patient.getFullName());
+                });
             }
             
             visitService.save(visit);
@@ -70,6 +94,15 @@ public class VisitController {
             Visit visit = visitService.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Visit not found"));
             
+            // Ensure patient name is set
+            if (visit.getPatientName() == null || visit.getPatientName().isEmpty()) {
+                if (visit.getPatientId() != null) {  // Only try to find patient if ID is not null
+                    patientService.findById(visit.getPatientId()).ifPresent(patient -> {
+                        visit.setPatientName(patient.getFullName());
+                    });
+                }
+            }
+            
             visit.setStatus(Visit.VisitStatus.CONFIRMED);
             visitService.save(visit);
             dentistId = visit.getDentistId();
@@ -78,7 +111,7 @@ public class VisitController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/visits/dentist/" + dentistId;
+        return "redirect:/dentist/appointments";  // Always redirect to /dentist/appointments
     }
     
     @PostMapping("/{id}/cancel")
@@ -89,6 +122,15 @@ public class VisitController {
             Visit visit = visitService.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Visit not found"));
             
+            // Ensure patient name is set
+            if (visit.getPatientName() == null || visit.getPatientName().isEmpty()) {
+                if (visit.getPatientId() != null) {  // Only try to find patient if ID is not null
+                    patientService.findById(visit.getPatientId()).ifPresent(patient -> {
+                        visit.setPatientName(patient.getFullName());
+                    });
+                }
+            }
+            
             visit.setStatus(Visit.VisitStatus.CANCELLED);
             visitService.save(visit);
             dentistId = visit.getDentistId();
@@ -97,7 +139,7 @@ public class VisitController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/visits/dentist/" + dentistId;
+        return "redirect:/dentist/appointments";  // Always redirect to /dentist/appointments
     }
     
     @PostMapping("/{id}/complete")
@@ -108,6 +150,15 @@ public class VisitController {
             Visit visit = visitService.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Visit not found"));
             
+            // Ensure patient name is set
+            if (visit.getPatientName() == null || visit.getPatientName().isEmpty()) {
+                if (visit.getPatientId() != null) {  // Only try to find patient if ID is not null
+                    patientService.findById(visit.getPatientId()).ifPresent(patient -> {
+                        visit.setPatientName(patient.getFullName());
+                    });
+                }
+            }
+            
             visit.setStatus(Visit.VisitStatus.COMPLETED);
             visit.setNotes(notes);
             visitService.save(visit);
@@ -117,7 +168,7 @@ public class VisitController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/visits/dentist/" + dentistId;
+        return "redirect:/dentist/appointments";  // Always redirect to /dentist/appointments
     }
     
     @GetMapping("/schedule")

@@ -35,7 +35,7 @@ public class DentistController {
     }
     
     @PostMapping
-    public String createDentist(@ModelAttribute Dentist dentist, RedirectAttributes redirectAttributes) {
+    public String createDentist(@ModelAttribute Dentist dentist, @RequestParam String password, RedirectAttributes redirectAttributes) {
         try {
             // Save the dentist first
             dentistService.save(dentist);
@@ -45,7 +45,7 @@ public class DentistController {
                 // Create a user account for the dentist
                 User user = new User();
                 user.setUsername(dentist.getEmail());
-                user.setPassword(passwordEncoder.encode(dentist.getPhone()));
+                user.setPassword(passwordEncoder.encode(password));
                 user.setRole(User.UserRole.DENTIST);
                 user.setAssociatedDentistId(dentist.getId());
                 userService.save(user);
@@ -59,11 +59,11 @@ public class DentistController {
     }
     
     @PostMapping("/{id}")
-    public String updateDentist(@PathVariable String id, @ModelAttribute Dentist dentist, RedirectAttributes redirectAttributes) {
+    public String updateDentist(@PathVariable String id, @ModelAttribute Dentist dentist, 
+                              @RequestParam(required = false) String password,
+                              RedirectAttributes redirectAttributes) {
         try {
             dentist.setId(id);
-            
-            // Save the dentist
             dentistService.save(dentist);
             
             // Find the existing user associated with this dentist
@@ -74,8 +74,12 @@ public class DentistController {
                     // Update the user's email if it has changed
                     if (!user.getUsername().equals(dentist.getEmail())) {
                         user.setUsername(dentist.getEmail());
-                        userService.save(user);
                     }
+                    // Update password if provided
+                    if (password != null && !password.trim().isEmpty()) {
+                        user.setPassword(passwordEncoder.encode(password));
+                    }
+                    userService.save(user);
                 });
             
             redirectAttributes.addFlashAttribute("successMessage", "Dentist updated successfully");

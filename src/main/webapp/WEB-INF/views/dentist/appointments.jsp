@@ -30,10 +30,10 @@
                             <c:forEach items="${pendingVisits}" var="visit">
                                 <tr>
                                     <td>
-                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
+                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
                                         <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
                                     </td>
-                                    <td>${visit.patientId}</td>
+                                    <td>${visit.patientName}</td>
                                     <td>${visit.reason}</td>
                                     <td>
                                         <form action="<c:url value='/visits/${visit.id}/confirm'/>" method="post" class="d-inline">
@@ -76,10 +76,10 @@
                             <c:forEach items="${confirmedVisits}" var="visit">
                                 <tr>
                                     <td>
-                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate" type="both" />
+                                        <fmt:parseDate value="${visit.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
                                         <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
                                     </td>
-                                    <td>${visit.patientId}</td>
+                                    <td>${visit.patientName}</td>
                                     <td>${visit.reason}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm" 
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     completeVisitModal.addEventListener('show.bs.modal', function(event) {
         const button = event.relatedTarget;
         const visitId = button.getAttribute('data-visit-id');
-        completeVisitForm.action = `/dental-clinic/visits/${visitId}/complete`;
+        completeVisitForm.action = '${pageContext.request.contextPath}/visits/' + visitId + '/complete';
     });
 });
 </script>

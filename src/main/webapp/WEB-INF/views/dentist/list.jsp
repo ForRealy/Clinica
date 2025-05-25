@@ -96,6 +96,20 @@
                             <option value="PROSTHODONTIST">Prosthodontist</option>
                         </select>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   minlength="6"
+                                   title="Password must be at least 6 characters long"
+                                   ${empty dentist.id ? 'required' : ''}>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">${empty dentist.id ? 'Required for new dentist' : 'Leave blank to keep current password'}</small>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -111,6 +125,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('dentistModal');
     const modalTitle = modal.querySelector('.modal-title');
     const form = document.getElementById('dentistForm');
+    const passwordField = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
     
     // Handle edit button clicks
     document.querySelectorAll('.edit-dentist').forEach(button => {
@@ -125,6 +149,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('phone').value = this.dataset.dentistPhone;
             document.getElementById('email').value = this.dataset.dentistEmail;
             document.getElementById('specialty').value = this.dataset.dentistSpecialty;
+            
+            // Clear password field when editing
+            passwordField.value = '';
+            passwordField.removeAttribute('required');
         });
     });
     
@@ -133,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modalTitle.textContent = 'Add New Dentist';
         form.reset();
         form.action = '/dental-clinic/admin/dentists';
+        passwordField.setAttribute('required', 'required');
     });
 });
 </script>

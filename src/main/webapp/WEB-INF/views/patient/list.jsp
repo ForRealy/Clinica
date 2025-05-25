@@ -112,6 +112,20 @@
                         </select>
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   minlength="6"
+                                   title="Password must be at least 6 characters long"
+                                   ${empty patient.id ? 'required' : ''}>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">${empty patient.id ? 'Required for new patient' : 'Leave blank to keep current password'}</small>
+                    </div>
+                    
                     <div id="legalTutorGroup" style="display: none;">
                         <hr>
                         <h4 class="mb-3">Legal Tutor Information</h4>
@@ -144,6 +158,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('patientModal');
     const modalTitle = modal.querySelector('.modal-title');
     const form = document.getElementById('patientForm');
+    const passwordField = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
     
     // Handle edit button clicks
     document.querySelectorAll('.edit-patient').forEach(button => {
@@ -162,6 +186,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('legalTutorName').value = this.dataset.patientTutorName;
             document.getElementById('legalTutorPhone').value = this.dataset.patientTutorPhone;
             
+            // Clear password field when editing
+            passwordField.value = '';
+            passwordField.removeAttribute('required');
+            
             // Trigger age check
             document.getElementById('dateOfBirth').dispatchEvent(new Event('change'));
         });
@@ -173,6 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.reset();
         form.action = '/dental-clinic/admin/patients';
         document.getElementById('legalTutorGroup').style.display = 'none';
+        passwordField.setAttribute('required', 'required');
     });
     
     // Age check for legal tutor

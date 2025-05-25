@@ -2,6 +2,7 @@ package com.dental.clinic.controller;
 
 import com.dental.clinic.model.Visit;
 import com.dental.clinic.service.VisitService;
+import com.dental.clinic.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +20,12 @@ import java.util.List;
 @PreAuthorize("hasRole('PATIENT')")
 public class PatientAppointmentsController {
     private final VisitService visitService;
+    private final PatientService patientService;
 
     @Autowired
-    public PatientAppointmentsController(VisitService visitService) {
+    public PatientAppointmentsController(VisitService visitService, PatientService patientService) {
         this.visitService = visitService;
+        this.patientService = patientService;
     }
 
     @GetMapping("/appointments")
@@ -41,7 +44,7 @@ public class PatientAppointmentsController {
 
     @PostMapping("/appointments/request")
     public String requestAppointment(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+            @RequestParam("dateTimeStr") String dateTimeStr,
             @RequestParam String reason,
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
@@ -55,6 +58,9 @@ public class PatientAppointmentsController {
                 return "redirect:/patient/appointments";
             }
             
+            // Parse the date string to LocalDateTime
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr.replace(" ", "T"));
+            
             // Create and save the visit
             Visit visit = new Visit();
             visit.setPatientEmail(patientEmail);
@@ -64,6 +70,12 @@ public class PatientAppointmentsController {
             
             // Set a default dentist (you might want to modify this based on your requirements)
             visit.setDentistId("1"); // Using Sarah's ID as default
+            
+            // Set patient name from the patient service
+            patientService.findByEmail(patientEmail).ifPresent(patient -> {
+                visit.setPatientId(patient.getId());
+                visit.setPatientName(patient.getFullName());
+            });
             
             visitService.save(visit);
             redirectAttributes.addFlashAttribute("successMessage", "Appointment requested successfully.");

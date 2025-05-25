@@ -49,7 +49,7 @@ public class PatientController {
     }
     
     @PostMapping
-    public String createPatient(@ModelAttribute Patient patient, RedirectAttributes redirectAttributes) {
+    public String createPatient(@ModelAttribute Patient patient, @RequestParam String password, RedirectAttributes redirectAttributes) {
         try {
             // Check if patient is 18 or older and clear tutor data if true
             if (patient.getAge() >= 18) {
@@ -65,7 +65,7 @@ public class PatientController {
                 // Create a user account for the patient
                 User user = new User();
                 user.setUsername(patient.getEmail());
-                user.setPassword(passwordEncoder.encode(patient.getPhone()));
+                user.setPassword(passwordEncoder.encode(password));
                 user.setRole(User.UserRole.PATIENT);
                 user.setAssociatedPatientId(patient.getId());
                 userService.save(user);
@@ -88,7 +88,9 @@ public class PatientController {
     }
     
     @PostMapping("/{id}")
-    public String updatePatient(@PathVariable String id, @ModelAttribute Patient patient, RedirectAttributes redirectAttributes) {
+    public String updatePatient(@PathVariable String id, @ModelAttribute Patient patient, 
+                              @RequestParam(required = false) String password,
+                              RedirectAttributes redirectAttributes) {
         try {
             patient.setId(id);
             
@@ -109,8 +111,12 @@ public class PatientController {
                     // Update the user's email if it has changed
                     if (!user.getUsername().equals(patient.getEmail())) {
                         user.setUsername(patient.getEmail());
-                        userService.save(user);
                     }
+                    // Update password if provided
+                    if (password != null && !password.trim().isEmpty()) {
+                        user.setPassword(passwordEncoder.encode(password));
+                    }
+                    userService.save(user);
                 });
             
             redirectAttributes.addFlashAttribute("successMessage", "Patient updated successfully");
