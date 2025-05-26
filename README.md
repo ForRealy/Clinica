@@ -92,6 +92,13 @@ cd Clinica
 ```bash
 mvn clean install
 ```
+3.3 Si el puerto esta ocupado
+```bash
+sudo lsof -i TCP:8080 -sTCP:LISTEN
+```
+```bash
+sudo kill [port]
+```
 
 4. Ejecutar la aplicación
 ```bash
