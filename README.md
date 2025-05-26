@@ -85,7 +85,7 @@ git clone https://github.com/ForRealy/Clinica
 
 2. Navegar al directorio del proyecto
 ```bash
-cd dental-clinic
+cd Clinica
 ```
 
 3. Construir el proyecto
